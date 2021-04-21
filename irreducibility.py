@@ -39,11 +39,10 @@ def irreducible_polys(d, n, monic = False):
         return polys(d, n).difference(reducible_polys(d, n))
 
 if __name__ == "__main__":
-    # Test
-
     # list of factors
     l = [(1, 1), (3, 2, 1), (4, 1, 0, 1), (0, 1), (2, 1)]
     p = polyMod(tuple(reduce(lambda p, q: polyMul(p, q), l)), 5)
     factors = check_reducible(p, 5)
-    print(factors)
+    
+    print(list(map(lambda x: polyPrint(x), factors)))
     assert Counter(factors) == Counter(l)

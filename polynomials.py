@@ -55,3 +55,10 @@ def polys(d, n, monic = False):
     s = set(map(lambda x: tuple(x), product(*l)))
     if monic: return set(filter(lambda x: x[-1] == 1, s))
     else: return s
+
+def polyPrint(p):
+    """
+    Return the string representing the given polynomial.
+    """
+    return " + ".join(([str(p[i]) for i in range(1) if p[0] != 0] + 
+        [f"{a}x^{i}" for i, a in enumerate(p) if a != 0][1:])[::-1])
