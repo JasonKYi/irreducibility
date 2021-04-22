@@ -9,7 +9,7 @@ def check_reducible_aux(p, n):
     for i, j in sum_eq(d):
         for r, s in product(polys(i, n, monic = True), polys(j, n, monic = True)):
             if polyCompare((polyMod(polyMul(r, s), n)), p):
-                return (check_reducible(r, n), check_reducible(s, n))
+                return (check_reducible_aux(r, n), check_reducible_aux(s, n))
     return p
 
 def check_reducible(p, n):
@@ -39,10 +39,11 @@ def irreducible_polys(d, n, monic = False):
         return polys(d, n).difference(reducible_polys(d, n))
 
 if __name__ == "__main__":
-    # list of factors
+    n = 5
     l = [(1, 1), (3, 2, 1), (4, 1, 0, 1), (0, 1), (2, 1)]
-    p = polyMod(tuple(reduce(lambda p, q: polyMul(p, q), l)), 5)
-    factors = check_reducible(p, 5)
-    
-    print(list(map(lambda x: polyPrint(x), factors)))
-    assert Counter(factors) == Counter(l)
+    p = polyMod(tuple(reduce(lambda p, q: polyMul(p, q), l)), n)
+    print(polyPrint(p))
+
+    factors = check_reducible(p, n)
+    print(list(map(polyPrint, factors)))
+    assert Counter(factors) == Counter(map(lambda x: tuple(polyMod(x, n)), l))

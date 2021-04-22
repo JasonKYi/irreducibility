@@ -60,5 +60,5 @@ def polyPrint(p):
     """
     Return the string representing the given polynomial.
     """
-    return " + ".join(([str(p[i]) for i in range(1) if p[0] != 0] + 
-        [f"{a}x^{i}" for i, a in enumerate(p) if a != 0][1:])[::-1])
+    return " + ".join(([f"{a}x^{i}" for i, a in enumerate(p) 
+        if a != 0])[::-1]).replace("x^0", "").replace("1x", "x").replace("^1", "")
