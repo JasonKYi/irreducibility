@@ -4,20 +4,20 @@ from functools import reduce
 from itertools import product
 from collections import Counter
 
-def check_reducible_aux(p, n):
+def check_reducible_aux(p, n, monic):
     d = len(p) - 1
     for i, j in sum_eq(d):
-        for r, s in product(polys(i, n, monic = True), polys(j, n, monic = True)):
+        for r, s in product(polys(i, n, monic = monic), polys(j, n, monic = monic)):
             if polyCompare((polyMod(polyMul(r, s), n)), p):
-                return (check_reducible_aux(r, n), check_reducible_aux(s, n))
+                return (check_reducible_aux(r, n, monic), check_reducible_aux(s, n, monic))
     return p
 
-def check_reducible(p, n):
+def check_reducible(p, n, monic = False):
     """
     Check if a polynomial p is reducible in the finite field of n elements.
     We assume the polynomial p is in canonical form.
     """
-    return flatten(check_reducible_aux(p, n))
+    return flatten(check_reducible_aux(p, n, monic))
 
 def reducible_polys(d, n, monic = False):
     """
@@ -40,10 +40,11 @@ def irreducible_polys(d, n, monic = False):
 
 if __name__ == "__main__":
     n = 5
-    l = [(1, 1), (3, 2, 1), (4, 1, 0, 1), (0, 1), (2, 1)]
-    p = polyMod(tuple(reduce(lambda p, q: polyMul(p, q), l)), n)
+    # l = [(1, 1), (1, 1), (1, 1), (1, 1), (1, 1)]
+    """ CAN'T DO NEGATIVE COEFFICIENTS! """
+    p = (3, 1, 0, 1) # polyMod(tuple(reduce(lambda p, q: polyMul(p, q), l)), n)
     print(polyPrint(p))
 
-    factors = check_reducible(p, n)
+    factors = check_reducible(p, n, monic = True)
     print(list(map(polyPrint, factors)))
-    assert Counter(factors) == Counter(map(lambda x: tuple(polyMod(x, n)), l))
+    # assert Counter(factors) == Counter(map(lambda x: tuple(polyMod(x, n)), l))
